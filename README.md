@@ -79,7 +79,7 @@ If you want to run the application manually instead of using `docker-compose`, t
     -e MARIADB_USER=bn_wordpress \
     -e MARIADB_DATABASE=bitnami_wordpress \
     --net wordpress-tier \
-    --volume mariadb_data:/bitnami \
+    --volume mariadb_data:/bitnami/mariadb \
     bitnami/mariadb:latest
   ```
 
@@ -92,7 +92,7 @@ If you want to run the application manually instead of using `docker-compose`, t
     -e WORDPRESS_DATABASE_USER=bn_wordpress \
     -e WORDPRESS_DATABASE_NAME=bitnami_wordpress \
     --net wordpress-tier \
-    --volume wordpress_data:/bitnami \
+    --volume wordpress_data:/bitnami/wordpress \
     bitnami/wordpress:latest
   ```
 
@@ -117,12 +117,12 @@ services:
   mariadb:
   ...
     volumes:
-      - /path/to/mariadb-persistence:/bitnami
+      - /path/to/mariadb-persistence:/bitnami/mariadb
   ...
   wordpress:
   ...
     volumes:
-      - /path/to/wordpress-persistence:/bitnami
+      - /path/to/wordpress-persistence:/bitnami/wordpress
   ...
 ```
 
@@ -142,7 +142,7 @@ services:
     -e MARIADB_USER=bn_wordpress \
     -e MARIADB_DATABASE=bitnami_wordpress \
     --net wordpress-tier \
-    --volume /path/to/mariadb-persistence:/bitnami \
+    --volume /path/to/mariadb-persistence:/bitnami/mariadb \
     bitnami/mariadb:latest
   ```
 
@@ -154,7 +154,7 @@ services:
     -e WORDPRESS_DATABASE_USER=bn_wordpress \
     -e WORDPRESS_DATABASE_NAME=bitnami_wordpress \
     --net wordpress-tier \
-    --volume /path/to/wordpress-persistence:/bitnami \
+    --volume /path/to/wordpress-persistence:/bitnami/wordpress \
     bitnami/wordpress:latest
   ```
 
@@ -268,7 +268,7 @@ $ docker run -d --name wordpress -p 80:80 -p 443:443 \
   -e WORDPRESS_DATABASE_USER=bn_wordpress \
   -e WORDPRESS_DATABASE_NAME=bitnami_wordpress \
   -e WORDPRESS_PASSWORD=my_password \
-  --volume wordpress_data:/bitnami \
+  --volume wordpress_data:/bitnami/wordpress \
   bitnami/wordpress:latest
 ```
 
@@ -350,7 +350,7 @@ $ docker run -d --name wordpress -p 80:80 -p 443:443 \
   --env WORDPRESS_DATABASE_NAME=wordpress_db \
   --env WORDPRESS_DATABASE_USER=wordpress_user \
   --env WORDPRESS_DATABASE_PASSWORD=wordpress_password \
-  --volume wordpress_data:/bitnami \
+  --volume wordpress_data:/bitnami/wordpress \
   bitnami/wordpress:latest
 ```
 
@@ -423,12 +423,12 @@ EXPOSE 8181 8143
 Based on the extended image, you can use a Docker Compose file like the one below to add other features:
 
 ```yaml
-version: '2'
+version: '3'
 services:
   mariadb:
     image: 'bitnami/mariadb:10.3'
     volumes:
-      - 'mariadb_data:/bitnami'
+      - 'mariadb_data:/bitnami/mariadb'
     environment:
       - MARIADB_USER=bn_wordpress
       - MARIADB_DATABASE=bitnami_wordpress
@@ -439,7 +439,7 @@ services:
       - '80:8181'
       - '443:8143'
     volumes:
-      - 'wordpress_data:/bitnami'
+      - 'wordpress_data:/bitnami/wordpress'
     depends_on:
       - mariadb
     environment:
